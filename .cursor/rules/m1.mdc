@@ -1,0 +1,36 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Milestone 1 Rules – LinkedIn Pipeline MVP
+
+Parent roadmap section: **Milestone 1** in `docs/roadmap.md`
+
+## Scope (must-have)
+- Implement `scripts/fetch-linkedin.js` to scrape public profile HTML.
+- Add CI step to run the script; builds fail on non-zero exit.
+- Produce `data/auto/linkedin.json` with structure:
+  ```jsonc
+  {
+    "positions": [
+      { "title": "", "company": "", "start": "YYYY-MM", "end": "YYYY-MM|null", "summary": "" }
+    ],
+    "education": [
+      { "school": "", "degree": "", "start": "YYYY", "end": "YYYY|null" }
+    ],
+    "skills": ["TypeScript", "Genomics", …]
+  }
+  ```
+- Replace placeholder `ExperienceTimeline.astro` to visualise positions.
+- Component must accept prop `max_items` (default 3) to limit items.
+- Update README with LinkedIn slug instructions.
+
+## Out of scope
+- AI summarisation (belongs to Milestone 2).
+- Styling overhaul (belongs to Milestone 3).
+
+## Acceptance criteria
+- `npm run dev` with a valid LinkedIn slug displays a timeline.
+- GitHub Actions workflow passes and deploys JSON in the artifact.
+- All Milestone 1 boxes in `docs/roadmap.md` are ticked.
