@@ -1,0 +1,50 @@
+---
+import { getConfig } from '../utils/getConfig.js';
+import * as Components from '../components/index.js';
+
+const config = getConfig();
+
+export function getStaticPaths() {
+  const cfg = getConfig();
+  return cfg.tabs.map((t) => ({ params: { tab: t.id } }));
+}
+
+const { tab } = Astro.params;
+
+// Find matching tab; default to first
+const currentTab = config.tabs.find(t => t.id === tab) ?? config.tabs[0];
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{currentTab.label} | Interactive CV</title>
+    <style>
+      nav { display:flex; gap:0.5rem; padding:1rem; }
+      nav a { text-decoration:none; color:#0366d6; }
+      nav a.active { font-weight:bold; }
+    </style>
+  </head>
+  <body>
+    <nav>
+      {config.tabs.map(t => (
+        <a href={`/${t.id}/`} class={t.id === currentTab.id ? 'active' : ''}>{t.icon ? `${t.icon} ` : ''}{t.label}</a>
+      ))}
+    </nav>
+
+    <main style="padding:1rem;">
+      {currentTab.components.map((entry) => {
+        let name;
+        let props = {};
+        if (typeof entry === 'string') {
+          name = entry;
+        } else if (typeof entry === 'object') {
+          // {componentName: {propA: value}}
+          name = Object.keys(entry)[0];
+          props = entry[name];
+        }
+        const Comp = Components[name];
+        return Comp ? <Comp {...props} /> : <p>⚠️ Unknown component: {name}</p>;
+      })}
+    </main>
+  </body>
+</html> 
