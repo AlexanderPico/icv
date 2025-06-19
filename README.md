@@ -5,13 +5,15 @@ A one-click, GitHub-Pages-hosted CV that auto-pulls your professional data and l
 ## 1 · Create your own CV (no command line required)
 
 1. **Use this template**  →  Click the green **"Use this template"** button on GitHub and choose *Create a new repository*.
-2. Once your copy is created, open **`icv.config.yaml`** in the web editor and fill in your account IDs (GitHub, ORCiD, Google Scholar, …).
-3. Commit the changes.  
+2. In the new repo, go to **Settings → Pages** and pick **"GitHub Actions"** as the source (one-time step to enable Pages).  
+   You only need to do this once per repo.
+3. Open **`icv.config.yaml`** in the web editor and fill in your account IDs (GitHub, ORCiD, Google Scholar, …).
+4. Commit the changes.  
    GitHub Actions will build and publish your site at:
    ```
    https://<your-username>.github.io/<your-repo>/
    ```
-4. Share the link—done!
+5. Share the link—done!
 
 > Tip: every time you edit `icv.config.yaml`, your site rebuilds automatically.  A monthly scheduled build keeps stats (e.g. citations) up to date.
 
