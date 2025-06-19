@@ -5,7 +5,11 @@ const first = config.tabs[0];
 ---
 <html>
   <head>
-    <meta http-equiv="refresh" content={`0; url=./${first.id}/`} />
+    <script>
+      // Redirect to the first tab, preserving the current repo path (e.g., /icv/)
+      const base = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
+      window.location.replace(base + '${first.id}/');
+    </script>
     <title>Redirecting…</title>
   </head>
   <body>
