@@ -27,7 +27,7 @@ const currentTab = config.tabs.find(t => t.id === tab) ?? config.tabs[0];
   <body>
     <nav>
       {config.tabs.map(t => (
-        <a href={`/${t.id}/`} class={t.id === currentTab.id ? 'active' : ''}>{t.icon ? `${t.icon} ` : ''}{t.label}</a>
+        <a href={`../${t.id}/`} class={t.id === currentTab.id ? 'active' : ''}>{t.icon ? `${t.icon} ` : ''}{t.label}</a>
       ))}
     </nav>
 
