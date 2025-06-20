@@ -4,13 +4,16 @@ _This file is the single source-of-truth for upcoming work.  Update it in PRs as
 
 ---
 
-## Milestone 1 – LinkedIn Pipeline MVP  ➜  **target version: v0.1.0**  (branch `m1-dev`)
+## Milestone 1 – LinkedIn → CV data pipeline  ➜  **target version: v0.1.0**
 
-- [ ] **LinkedIn scraper**: `scripts/fetch-linkedin.js` parses public profile and writes `data/auto/linkedin.json`.
-- [ ] **CI integration**: run the scraper in `.github/workflows/deploy.yml`; fail build on error.
-- [ ] **ExperienceTimeline component**: render timeline cards from `linkedin.json`.
-- [ ] **YAML prop `max_items`**: allow homepage to truncate timeline.
-- [ ] **README update**: how to find the LinkedIn slug.
+The original HTML-scraper approach was dropped in favour of a **100 % client-side workflow** where the user provides the PDF downloaded from LinkedIn.  Tasks below reflect that new direction.
+
+- [x] **PDF extractor** – `scripts/extract-linkedin.js` reads `data/Profile.pdf`, analyses glyphs (font size, position) and emits `data/experience.json`.
+- [x] **Fixture-based test-suite** – `tests/fixtures/*` contain sample PDFs and golden JSON; `npm test` validates the extractor against all fixtures.
+- [ ] **CI integration** – on every push the extractor + tests run in GitHub Actions; build fails on regression.
+- [x] **ExperienceTimeline component** renders from the new `experience.json` (incl. optional `location`).
+- [ ] **Config option `max_items`** – allow timeline truncation via YAML.
+- [ ] **Docs update** – README section "Export your LinkedIn PDF & drop it into `data/`".
 
 ---
 
@@ -63,4 +66,4 @@ _This file is the single source-of-truth for upcoming work.  Update it in PRs as
 
 1. Check off boxes (`- [x]`) in the same PR that implements the task.
 2. Feel free to add, remove, or reorder tasks as priorities change.
-3. Keep milestones scoped so each one can be tagged and merged independently. 
+3. Keep milestones scoped so each one can be tagged and merged independently.

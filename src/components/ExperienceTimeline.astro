@@ -1,6 +1,54 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+
+/*
+  Expect a simple hand-edited JSON file at data/experience.json:
+
+  {
+    "positions": [
+      {
+        "title": "Senior Software Engineer",
+        "company": "Example Corp",
+        "start": "2021-05",
+        "end": null,
+        "summary": "Working on awesome stuff"
+      }
+    ]
+  }
+
+  You can generate this file from LinkedIn's "Download your data" feature or maintain it manually.
+*/
+
+const { max_items = 9999 } = Astro.props;
+let data = { positions: [] };
+try {
+  const jsonPath = path.resolve(process.cwd(), 'data/experience.json');
+  data = JSON.parse(await fs.promises.readFile(jsonPath, 'utf-8'));
+} catch {
+  // file missing – keep empty list
+}
+
+const positions = (data.positions || []).slice(0, max_items);
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>Experience Timeline</h2>
-  <p>Placeholder for work & education timeline.</p>
-</section> 
+<section class="timeline">
+  {positions.length === 0 && <p>No experience data available.</p>}
+  {positions.map((pos) => (
+    <div class="item">
+      <h3>{pos.title}</h3>
+      <p><strong>{pos.company}</strong></p>
+      {pos.location && <p>{pos.location}</p>}
+      <p>{pos.start} – {pos.end ?? 'Present'}</p>
+      {pos.summary && <p>{pos.summary}</p>}
+    </div>
+  ))}
+  {Astro.props.max_items && data.positions && data.positions.length > Astro.props.max_items && (
+    <p><em>See full CV for more…</em></p>
+  )}
+</section>
+<style>
+.timeline { display: flex; flex-direction: column; gap: 1rem; }
+.item { border-left: 2px solid var(--accent, #0ea5e9); padding-left: 0.75rem; }
+.item h3 { margin: 0; font-size: 1.1rem; }
+.item p { margin: 0.25rem 0; }
+</style> 

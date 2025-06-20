@@ -70,4 +70,19 @@ npm run dev  # open http://localhost:4321
 - One-click PDF export via print CSS
 - CLI: `npx create-icv` for even faster setup
 
-Contributions & feedback welcome — feel free to open issues or PRs! :rocket: 
+Contributions & feedback welcome — feel free to open issues or PRs! :rocket:
+
+### Experience data via LinkedIn Profile PDF
+
+Save your LinkedIn profile using **More → Save as PDF** and drop the resulting `Profile.pdf` into the `data/` folder (any *.pdf in that folder will be picked up). Then run:
+
+```bash
+npm install   # first time only, installs pdf-parse
+npm run extract-linkedin   # or npm run fetch-data (CI does this automatically)
+```
+
+The extractor parses the "Experience" section of the PDF and writes `data/experience.json`, which the Astro components render.
+
+### Automated data
+
+Monthly CI runs execute `npm run fetch-data`, which now processes the Profile PDF automatically if present. 

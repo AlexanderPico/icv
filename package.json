@@ -6,13 +6,20 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "extract-linkedin": "node scripts/extract-linkedin.js",
+    "fetch-data": "node scripts/fetch-data.js",
+    "test": "node tests/extract-linkedin.test.js"
   },
   "dependencies": {
     "astro": "^3.5.0",
-    "js-yaml": "^4.1.0"
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
+    "js-yaml": "^4.1.0",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.10.38"
   },
   "devDependencies": {
     "typescript": "^5.2.0"
   }
-} 
+}

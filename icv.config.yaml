@@ -13,7 +13,7 @@ charts: "chartjs"       # chartjs | apex | d3
 # ────────────────────────────────────────────────────────────────
 
 sources:
-  linkedin: "jane-researcher"
+  # linkedin: "apico"   # Deprecated – provide experience.json manually instead
   orcid: "0000-0002-1825-0097"
   google_scholar: "RVmIkhMAAAAJ"
   github: "janer"

@@ -7,38 +7,48 @@ alwaysApply: false
 
 These rules apply to all milestones unless a milestone-specific `.mdc` overrides them.
 
-1. **Roadmap as source-of-truth**  
+- **Roadmap as source-of-truth**  
    Update `docs/roadmap.md` whenever tasks are started or completed.  Checkbox status must match the codebase.
 
-2. **Branching**  
-   Feature work happens on the active milestone branch (e.g., `m1-dev`). Merge back to `main` only when the milestone is complete and tagged.
-
-3. **CI / GitHub Actions**  
-   • Use Node.js 18.  
-   • Build with `npm ci` and run `npm run build`.  
-   • `BASE_PATH` env var must be set to `/${{ github.event.repository.name }}/` during build.  
-   • Fail the workflow if any fetcher exits non-zero.
-
-4. **Component pattern**  
+- **Component pattern**  
    • All visual components live in `src/components/` and are exported via `src/components/index.js`.  
    • Components should accept props exactly as defined in YAML.
 
-5. **Data folder convention**  
+- **Data folder convention**  
    • Raw or processed JSON lives under `data/auto/`. Files should be referenced via relative imports, not dynamic `fs` reads, so Astro can statically bundle them.
 
-6. **AI Services**  
+- **AI Services**  
    • Default provider is a local JavaScript model—no external API keys required.  
    • Avoid token-based providers.
 
-7. **Accessibility & Theming**  
+- **Accessibility & Theming**  
    • Use semantic HTML, `aria-*` where appropriate.  
    • All components must work in light and dark themes (colors via CSS variables).
 
-8. **Testing / Linting**  
+- **Testing / Linting**  
    • ESLint and Prettier configs will be added in later milestones; until then, keep code formatted with Prettier defaults.
 
-9. **Never commit secrets**  
-   `.env` and other sensitive files are ignored via `.gitignore`.
+- **Debug logging**  
+    Each script/component that needs verbose output should wrap `console.log` in a local `debug()` helper that only prints when the environment variable `DEBUG` contains a matching keyword.  
+    Example usage in a Node script:  
+    ```js
+    const log = (...a) => process.env.DEBUG?.includes('linkedin') && console.log('[linkedin]', ...a);
+    ```
+    This lets you run `DEBUG=linkedin node scripts/fetch-linkedin.js` during development without polluting CI logs.
 
-10. **License & Attribution**  
-    Ensure any third-party code or models comply with MIT license compatibility before inclusion.
+    And each script should include ample logging of key booleans and example variable values so the developer can track the logic and performance, especialy in new parts of the code under development, adding more outputs if troubles persist.
+
+- **Troubleshooting**
+    If a particular function requires troubleshooting, then increase the logging to make it clear what is going on.
+
+- **Patching**
+    If you have a singular solution proposed, proceed with imlementing it. Do not ask to implement; just do it.
+
+- **Patching directive**  
+    When the assistant generates changes to the codebase, the assistant must implement the patch immediately in the same turn—no follow-up questions—unless essential information is missing. When the assistant has a plan for the next iteration, the assistant must implement the plan immediately in the same turn.
+
+- **Shell commands**
+    Provide bash commands **without inline `# comments`**—this applies to *single-line commands* and to *multi-line script blocks*. Put any explanation on separate lines before or after the code block, never on the same line as the command itself.
+
+
+
