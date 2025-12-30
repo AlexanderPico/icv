@@ -21,3 +21,6 @@ yarn-error.log*
 
 # Others
 *.local
+
+# Cursor Chat Keeper
+cursor-chats/

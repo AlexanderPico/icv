@@ -7,8 +7,11 @@ alwaysApply: false
 
 These rules apply to all milestones unless a milestone-specific `.mdc` overrides them.
 
+- **Important**
+    If you have a singular solution proposed, proceed with imlementing it. Do not ask to implement; just do it. If tests are present, then continue to iterate until tests pass. Do not stop for input; iterate until tests pass, then summarize.
+
 - **Roadmap as source-of-truth**  
-   Update `docs/roadmap.md` whenever tasks are started or completed.  Checkbox status must match the codebase.
+    Create a `docs/roadmap.md` if it does not already exist and structure as a checkbox list you can manage covering milestones and tasks. Update `docs/roadmap.md` whenever tasks are started or completed.  Checkbox status must match the codebase.
 
 - **Component pattern**  
    • All visual components live in `src/components/` and are exported via `src/components/index.js`.  
@@ -41,14 +44,12 @@ These rules apply to all milestones unless a milestone-specific `.mdc` overrides
 - **Troubleshooting**
     If a particular function requires troubleshooting, then increase the logging to make it clear what is going on.
 
-- **Patching**
-    If you have a singular solution proposed, proceed with imlementing it. Do not ask to implement; just do it.
-
 - **Patching directive**  
     When the assistant generates changes to the codebase, the assistant must implement the patch immediately in the same turn—no follow-up questions—unless essential information is missing. When the assistant has a plan for the next iteration, the assistant must implement the plan immediately in the same turn.
 
 - **Shell commands**
-    Provide bash commands **without inline `# comments`**—this applies to *single-line commands* and to *multi-line script blocks*. Put any explanation on separate lines before or after the code block, never on the same line as the command itself.
+    Provide zsh commands **without inline `# comments`**—this applies to *single-line commands* and to *multi-line script blocks*. Put any explanation on separate lines before or after the code block, never on the same line as the command itself. Important: If you can run the shell command yourself, especially if you are interested in the output (e.g., errors and console output), then you must execute the command yourself. Don't bother asking the user to do it.
+
 
 
 
