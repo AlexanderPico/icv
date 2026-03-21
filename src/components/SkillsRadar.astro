@@ -1,6 +1,52 @@
 ---
+/**
+ * SkillsRadar — renders cv.skills as categorized skill tags.
+ * (Radar chart via Chart.js requires >3 axes to be meaningful;
+ *  falls back to a clean tag layout when data is sparse.)
+ */
+import { getSkills } from '../utils/loadCVData.js';
+
+const skills = getSkills();
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>Skills Radar</h2>
-  <p>Placeholder for skills radar chart.</p>
-</section> 
+<section class="skills-section">
+  <h2>Skills</h2>
+  {skills.map((category) => (
+    <div class="skill-category">
+      <h3>{category.name} <span class="level-badge">{category.level}</span></h3>
+      <div class="skill-tags">
+        {(category.keywords ?? []).map((kw) => (
+          <span class="skill-tag">{kw}</span>
+        ))}
+      </div>
+    </div>
+  ))}
+</section>
+
+<style>
+  .skills-section { margin-bottom: 1.5rem; }
+  .skills-section h2 { margin-bottom: 0.75rem; }
+  .skill-category { margin-bottom: 1rem; }
+  .skill-category h3 {
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .level-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--accent, #0366d6);
+    color: #fff;
+    font-weight: 500;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .skill-tag {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background: var(--surface, #f0f4f8);
+    font-size: 0.85rem;
+    color: var(--text-primary, #333);
+  }
+</style>

@@ -1,6 +1,83 @@
 ---
+/**
+ * PublicationsTable — sortable table of cv.publications with DOI links and citation counts.
+ */
+import { getPublications } from '../utils/loadCVData.js';
+
+const pubs = getPublications();
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>Publications Table</h2>
-  <p>Placeholder for publications listing.</p>
+<section class="publications">
+  <h2>Publications ({pubs.length})</h2>
+  <table class="pub-table">
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Title</th>
+        <th>Venue</th>
+        <th class="num-col">Citations</th>
+      </tr>
+    </thead>
+    <tbody>
+      {pubs.map((pub) => {
+        const doi = pub.doi ?? pub.DOI;
+        const venue = pub.journal ?? pub.venue ?? pub.containerTitle ?? '';
+        return (
+          <tr>
+            <td class="year-col">{pub.year ?? '—'}</td>
+            <td>
+              {doi
+                ? <a href={`https://doi.org/${doi}`} target="_blank" rel="noopener">{pub.title}</a>
+                : pub.title
+              }
+              {pub.authors && pub.authors.length > 0 && (
+                <div class="authors">
+                  {pub.authors.slice(0, 5).map((a) => a.name).join(', ')}
+                  {pub.authors.length > 5 && ` + ${pub.authors.length - 5} more`}
+                </div>
+              )}
+            </td>
+            <td class="venue-col">{venue}</td>
+            <td class="num-col">{pub.citationCount ?? 0}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
 </section>
+
+<style>
+  .publications { margin-bottom: 1.5rem; }
+  .publications h2 { margin-bottom: 0.75rem; }
+  .pub-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .pub-table th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 2px solid var(--border, #ddd);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary, #555);
+  }
+  .pub-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border, #eee);
+    vertical-align: top;
+  }
+  .pub-table a {
+    color: var(--accent, #0366d6);
+    text-decoration: none;
+  }
+  .pub-table a:hover { text-decoration: underline; }
+  .year-col { white-space: nowrap; width: 4rem; }
+  .venue-col { color: var(--text-secondary, #666); font-size: 0.85rem; }
+  .num-col { text-align: right; width: 5rem; }
+  .authors {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #888);
+    margin-top: 0.2rem;
+  }
+</style>

@@ -1,6 +1,73 @@
 ---
+/**
+ * GithubHeatmap — renders cv.software as a sortable repo grid with
+ * language, stars, forks. (A real contribution heatmap requires the
+ * GitHub GraphQL API at runtime; this is the build-time equivalent
+ * using the data cvkit already provides.)
+ */
+import { getSoftware } from '../utils/loadCVData.js';
+
+const repos = getSoftware();
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>GitHub Heatmap</h2>
-  <p>Placeholder for GitHub contributions calendar.</p>
-</section> 
+<section class="github-section">
+  <h2>Software & Open Source ({repos.length} repos)</h2>
+  <div class="repo-grid">
+    {repos.map((repo) => (
+      <a href={repo.url} target="_blank" rel="noopener" class="repo-card">
+        <div class="repo-name">{repo.name}</div>
+        {repo.description && <div class="repo-desc">{repo.description}</div>}
+        <div class="repo-meta">
+          {repo.language && <span class="lang">{repo.language}</span>}
+          <span>⭐ {repo.stars ?? 0}</span>
+          <span>🍴 {repo.forks ?? 0}</span>
+          {repo.openIssues > 0 && <span>🔴 {repo.openIssues}</span>}
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .github-section { margin-bottom: 1.5rem; }
+  .github-section h2 { margin-bottom: 0.75rem; }
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+  .repo-card {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border, #e1e4e8);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.15s;
+  }
+  .repo-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .repo-name {
+    font-weight: 600;
+    color: var(--accent, #0366d6);
+    margin-bottom: 0.25rem;
+  }
+  .repo-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #586069);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+  .repo-meta {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary, #586069);
+  }
+  .lang {
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    background: var(--surface, #f0f4f8);
+    font-size: 0.75rem;
+  }
+</style>

@@ -1,6 +1,65 @@
 ---
+/**
+ * CoauthorNetwork — renders top co-authors derived from cv.publications.
+ * Uses a sorted bar-style list. A force-directed graph (d3) can be a
+ * future enhancement; this gives immediate value from the data cvkit provides.
+ */
+import { getCoauthors } from '../utils/loadCVData.js';
+
+const coauthors = getCoauthors().slice(0, 20);
+const maxCount = coauthors[0]?.count ?? 1;
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>Co-author Network</h2>
-  <p>Placeholder for co-author network graph.</p>
-</section> 
+<section class="coauthor-section">
+  <h2>Top Co-authors</h2>
+  {coauthors.length === 0 ? (
+    <p class="empty">No co-author data available.</p>
+  ) : (
+    <div class="coauthor-list">
+      {coauthors.map((ca) => (
+        <div class="coauthor-row">
+          <span class="ca-name">{ca.name}</span>
+          <div class="bar-bg">
+            <div class="bar-fill" style={`width: ${(ca.count / maxCount) * 100}%`} />
+          </div>
+          <span class="ca-count">{ca.count}</span>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .coauthor-section { margin-bottom: 1.5rem; }
+  .coauthor-section h2 { margin-bottom: 0.75rem; }
+  .empty { color: var(--text-secondary, #888); }
+  .coauthor-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .coauthor-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 40px;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+  }
+  .ca-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .bar-bg {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--surface, #eee);
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--accent, #0366d6);
+    transition: width 0.3s;
+  }
+  .ca-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--text-secondary, #666);
+  }
+</style>

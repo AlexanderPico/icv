@@ -1,6 +1,80 @@
 ---
+/**
+ * CitationChart — publications + citations per year, rendered as a Chart.js
+ * combo chart (bar = pubs, line = citations). Data injected at build time,
+ * Chart.js runs client-side.
+ */
+import { getPublicationsByYear } from '../utils/loadCVData.js';
+
+const byYear = getPublicationsByYear();
+const labels = byYear.map((d) => d.year);
+const pubCounts = byYear.map((d) => d.count);
+const citationCounts = byYear.map((d) => d.citations);
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>Citation Chart</h2>
-  <p>Placeholder for citation over time chart.</p>
-</section> 
+<section class="citation-chart">
+  <h2>Citations & Publications Over Time</h2>
+  <canvas id="citationChart" width="600" height="280"></canvas>
+</section>
+
+<script define:vars={{ labels, pubCounts, citationCounts }}>
+  // Load Chart.js from CDN (Astro client-side)
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
+  script.onload = () => {
+    const ctx = document.getElementById('citationChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Publications',
+            data: pubCounts,
+            backgroundColor: 'rgba(3, 102, 214, 0.7)',
+            yAxisID: 'yPubs',
+            order: 2,
+          },
+          {
+            label: 'Citations',
+            data: citationCounts,
+            type: 'line',
+            borderColor: '#e36209',
+            backgroundColor: 'rgba(227, 98, 9, 0.1)',
+            fill: true,
+            tension: 0.3,
+            yAxisID: 'yCitations',
+            order: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          yPubs: {
+            position: 'left',
+            beginAtZero: true,
+            title: { display: true, text: 'Publications' },
+            ticks: { stepSize: 1 },
+          },
+          yCitations: {
+            position: 'right',
+            beginAtZero: true,
+            title: { display: true, text: 'Citations' },
+            grid: { drawOnChartArea: false },
+          },
+        },
+        plugins: {
+          legend: { position: 'bottom' },
+        },
+      },
+    });
+  };
+  document.head.appendChild(script);
+</script>
+
+<style>
+  .citation-chart { margin-bottom: 1.5rem; }
+  .citation-chart h2 { margin-bottom: 0.75rem; }
+  canvas { max-width: 100%; }
+</style>

@@ -1,6 +1,91 @@
 ---
+/**
+ * ExperienceTimeline — vertical timeline of cv.work + cv.education entries.
+ */
+import { getWork, getEducation } from '../utils/loadCVData.js';
+
+const work = getWork();
+const education = getEducation();
+
+const items = [
+  ...work.map((w) => ({
+    type: 'work',
+    title: w.position ?? w.name,
+    subtitle: w.position ? w.name : '',
+    url: w.url,
+    startDate: w.startDate ?? '',
+    endDate: w.endDate ?? 'Present',
+    summary: w.summary ?? '',
+    highlights: w.highlights ?? [],
+  })),
+  ...education.map((e) => ({
+    type: 'education',
+    title: `${e.studyType ?? ''} ${e.area ?? ''}`.trim(),
+    subtitle: e.institution ?? '',
+    url: '',
+    startDate: e.startDate ?? '',
+    endDate: e.endDate ?? '',
+    summary: '',
+    highlights: [],
+  })),
+].sort((a, b) => (b.startDate > a.startDate ? 1 : -1));
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>Experience Timeline</h2>
-  <p>Placeholder for work & education timeline.</p>
-</section> 
+<section class="timeline">
+  <h2>Experience & Education</h2>
+  {items.map((item) => (
+    <div class={`timeline-item ${item.type}`}>
+      <div class="timeline-marker" />
+      <div class="timeline-content">
+        <div class="timeline-date">{item.startDate} — {item.endDate}</div>
+        <h3>
+          {item.title}
+          {item.type === 'education' && <span class="badge">🎓</span>}
+        </h3>
+        {item.subtitle && (
+          item.url
+            ? <a href={item.url} target="_blank" rel="noopener" class="subtitle">{item.subtitle}</a>
+            : <span class="subtitle">{item.subtitle}</span>
+        )}
+        {item.summary && <p class="summary-text">{item.summary}</p>}
+        {item.highlights.length > 0 && (
+          <ul>
+            {item.highlights.map((h) => <li>{h}</li>)}
+          </ul>
+        )}
+      </div>
+    </div>
+  ))}
+</section>
+
+<style>
+  .timeline { position: relative; padding-left: 2rem; margin-bottom: 1.5rem; }
+  .timeline h2 { margin-bottom: 1rem; }
+  .timeline-item {
+    position: relative;
+    padding-bottom: 1.5rem;
+    border-left: 2px solid var(--border, #ddd);
+    padding-left: 1.5rem;
+  }
+  .timeline-marker {
+    position: absolute;
+    left: -7px;
+    top: 0.3rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent, #0366d6);
+  }
+  .education .timeline-marker { background: #28a745; }
+  .timeline-date {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #888);
+    margin-bottom: 0.15rem;
+  }
+  .timeline-content h3 { margin: 0 0 0.25rem; font-size: 1.1rem; }
+  .subtitle { color: var(--text-secondary, #555); font-size: 0.95rem; text-decoration: none; }
+  .subtitle:hover { text-decoration: underline; }
+  .badge { font-size: 0.85rem; margin-left: 0.5rem; }
+  .summary-text { margin: 0.5rem 0; line-height: 1.5; }
+  .timeline-content ul { margin: 0.5rem 0; padding-left: 1.2rem; }
+  .timeline-content li { margin-bottom: 0.25rem; line-height: 1.4; }
+</style>

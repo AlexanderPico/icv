@@ -13,11 +13,9 @@ charts: "chartjs"       # chartjs | apex | d3
 # ────────────────────────────────────────────────────────────────
 
 sources:
-  linkedin: "jane-researcher"
-  orcid: "0000-0002-1825-0097"
-  google_scholar: "RVmIkhMAAAAJ"
-  github: "janer"
-  semantic_scholar: "56781234"
+  orcid: "0000-0001-5944-9960"
+  github: "AlexanderPico"
+  semantic_scholar: "2148817073"
 
 # ────────────────────────────────────────────────────────────────
 # Page layout – Each tab becomes a route (/overview, /cv, …)

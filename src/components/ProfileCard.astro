@@ -1,7 +1,91 @@
 ---
-// Placeholder component: renders a simple heading for now
+/**
+ * ProfileCard — renders cv.basics: name, title, summary, location, links.
+ */
+import { getBasics } from '../utils/loadCVData.js';
+
+const basics = getBasics();
+const location = basics.location
+  ? [basics.location.city, basics.location.region, basics.location.countryCode].filter(Boolean).join(', ')
+  : '';
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>Profile Card</h2>
-  <p>This is a placeholder for the profile card component.</p>
-</section> 
+<section class="profile-card">
+  <div class="profile-header">
+    <h1 class="profile-name">{basics.name}</h1>
+    {basics.label && <p class="profile-label">{basics.label}</p>}
+  </div>
+
+  {basics.summary && <p class="profile-summary">{basics.summary}</p>}
+
+  <div class="profile-meta">
+    {location && (
+      <span class="meta-item">📍 {location}</span>
+    )}
+    {basics.email && (
+      <a href={`mailto:${basics.email}`} class="meta-item">✉️ {basics.email}</a>
+    )}
+    {basics.url && (
+      <a href={basics.url} target="_blank" rel="noopener" class="meta-item">🔗 Website</a>
+    )}
+  </div>
+
+  {basics.profiles && basics.profiles.length > 0 && (
+    <div class="profile-links">
+      {basics.profiles.map((p) => (
+        <a href={p.url} target="_blank" rel="noopener" class="profile-link">
+          {p.network}
+        </a>
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .profile-card {
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: var(--surface, #f8f9fa);
+    margin-bottom: 1.5rem;
+  }
+  .profile-header { margin-bottom: 0.75rem; }
+  .profile-name {
+    margin: 0;
+    font-size: 1.8rem;
+    color: var(--text-primary, #1a1a2e);
+  }
+  .profile-label {
+    margin: 0.25rem 0 0;
+    font-size: 1.1rem;
+    color: var(--text-secondary, #555);
+  }
+  .profile-summary {
+    line-height: 1.6;
+    color: var(--text-primary, #333);
+  }
+  .profile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+  }
+  .meta-item {
+    color: var(--text-secondary, #555);
+    text-decoration: none;
+  }
+  .meta-item:hover { text-decoration: underline; }
+  .profile-links {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .profile-link {
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    background: var(--accent, #0366d6);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .profile-link:hover { opacity: 0.85; }
+</style>

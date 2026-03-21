@@ -1,6 +1,55 @@
 ---
+/**
+ * QuickStats — headline numbers: h-index, total citations, publications, repos, stars.
+ */
+import { getCitationMetrics, getPublications, getSoftware } from '../utils/loadCVData.js';
+
+const metrics = getCitationMetrics();
+const pubCount = getPublications().length;
+const softwareCount = getSoftware().length;
+const totalStars = getSoftware().reduce((sum, s) => sum + (s.stars ?? 0), 0);
+
+const stats = [
+  { label: 'h-index', value: metrics?.hIndex ?? '—' },
+  { label: 'Citations', value: metrics?.totalCitations?.toLocaleString() ?? '—' },
+  { label: 'Publications', value: pubCount },
+  { label: 'i10-index', value: metrics?.i10Index ?? '—' },
+  { label: 'Software Repos', value: softwareCount },
+  { label: 'GitHub Stars', value: totalStars },
+];
 ---
-<section style="padding:1rem;border:1px dashed #ccc;">
-  <h2>Quick Stats</h2>
-  <p>Placeholder for quick statistics (h-index, stars, etc.).</p>
-</section> 
+<section class="quick-stats">
+  {stats.map((s) => (
+    <div class="stat-card">
+      <div class="stat-value">{s.value}</div>
+      <div class="stat-label">{s.label}</div>
+    </div>
+  ))}
+</section>
+
+<style>
+  .quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .stat-card {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px;
+    background: var(--surface, #f8f9fa);
+  }
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent, #0366d6);
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #555);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>

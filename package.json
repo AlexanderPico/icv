@@ -9,6 +9,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@cvkit/schema": "file:../cvkit/packages/schema",
     "astro": "^3.5.0",
     "js-yaml": "^4.1.0"
   },
