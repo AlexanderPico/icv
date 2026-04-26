@@ -21,3 +21,7 @@ yarn-error.log*
 
 # Others
 *.local
+
+# Local agent orientation files
+AGENTS_README.local.md
+AGENT_README.local.md
