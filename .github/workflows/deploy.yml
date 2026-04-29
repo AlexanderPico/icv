@@ -30,6 +30,8 @@ jobs:
       # TODO: add data fetch step here (scripts/fetch-data.js)
       #- run: node scripts/fetch-data.js
 
+      - run: npm test
+
       - run: npm run build
         env:
           BASE_PATH: "/${{ github.event.repository.name }}/"
