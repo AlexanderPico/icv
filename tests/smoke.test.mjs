@@ -54,3 +54,22 @@ test('icv.config.yaml remains parseable as YAML', async () => {
   const parsed = yaml.load(raw);
   assert.equal(parsed.theme, 'auto');
 });
+
+test('repo documents and wires the stable smoke-test CI path', async () => {
+  const workflowRaw = await readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8');
+  const workflow = yaml.load(workflowRaw);
+  const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
+
+  assert.equal(workflow.name, 'CI');
+  assert.ok(workflow.on.push, 'ci workflow should run on push');
+  assert.ok(workflow.on.pull_request, 'ci workflow should run on pull_request');
+
+  const steps = workflow.jobs?.validate?.steps ?? [];
+  const runCommands = steps.flatMap((step) => (typeof step.run === 'string' ? [step.run] : []));
+  assert.ok(runCommands.includes('npm ci'), 'ci workflow should install deps with npm ci');
+  assert.ok(runCommands.includes('npm test'), 'ci workflow should run npm test');
+  assert.ok(runCommands.includes('npm run build'), 'ci workflow should run npm run build');
+
+  assert.match(readme, /npm test/, 'README should document npm test');
+  assert.match(readme, /pull requests?/i, 'README should mention pull request CI coverage');
+});

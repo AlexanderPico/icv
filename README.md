@@ -15,7 +15,7 @@ A one-click, GitHub-Pages-hosted CV that auto-pulls your professional data and l
    ```
 5. Share the link—done!
 
-> Tip: every time you edit `icv.config.yaml`, your site rebuilds automatically.  A monthly scheduled build keeps stats (e.g. citations) up to date.
+> Tip: every time you edit `icv.config.yaml`, your site rebuilds automatically. A monthly scheduled build keeps stats (e.g. citations) up to date, and pull requests now run the same smoke tests/build in CI before merge.
 
 ---
 
@@ -56,9 +56,13 @@ For those comfortable with Node & npm:
 
 ```bash
 # clone your repo
-npm install
-npm run dev  # open http://localhost:4321
+npm ci
+npm run dev   # open http://localhost:4321
+npm test      # smoke-check config, component wiring, checked-in data, and CI/docs contract
+npm run build
 ```
+
+Pushes to `main` and pull requests also run `npm test` and `npm run build` in `.github/workflows/ci.yml`, while the Pages deploy workflow remains responsible for publishing the built site.
 
 ---
 
